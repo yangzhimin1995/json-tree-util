@@ -3,10 +3,10 @@ exports.json2Tree = function (jsonArray, config) {
         let children = [];
         array.forEach(node => {
             if (node[config.nodeParentIdField] === parentId) {
-                node[config.childrenField] = getChildren(array, node[config.nodeIdField], config);
                 Object.keys(config.fieldMaps).forEach(key => {
                     node[config.fieldMaps[key]] = node[key] || undefined
                 });
+                node[config.childrenField] = getChildren(array, node[config.nodeIdField], config);
                 children.push(node);
             }
         });
