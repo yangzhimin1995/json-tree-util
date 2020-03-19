@@ -5,7 +5,7 @@
 `npm install json-tree-util`
 
 #### 引入
-`import jtUtil from "json-tree-util";`
+`import jtUtil from "json-tree-util"`
 
 
 #### json数组转树状数据的使用
@@ -36,10 +36,12 @@
                   ];
 
    const treeData = jtUtil.json2Tree(jsonArray, {nodeParentIdField: 'pid', fieldMaps: {name: 'label'}});
+   
    console.log(treeData);
    
-   结果输出： 
-   treeData = [{
+   输出： 
+
+   [{
        id: 1,
        name: "节点1",
        pid: 0,
@@ -116,10 +118,12 @@
     }];
     
     let jsonArray = jtUtil.tree2Json(treeData, {topNodeValue: null, nodeParentIdField: 'pid'});
+    
     console.log(jsonArray);
     
-    结果输出：
-    jsonArray = [
+    输出：
+    
+    [
         {"id": 4, "name": "节点1-1-1", "pid": 2},
         {"id": 5, "name": "节点1-1-2", "pid": 2},
         {"id": 2, "name": "节点1-1", "pid": 1},
