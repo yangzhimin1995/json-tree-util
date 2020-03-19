@@ -11,7 +11,7 @@
 #### json数组转树状数据的使用
    ```
    
-   const treeData = jtUtil.json2Tree(jsonArray, config);
+   jtUtil.json2Tree(jsonArray, config);
    
    默认 config = {        
        nodeIdField: 'id', //节点唯一值的字段
@@ -76,7 +76,7 @@
 #### 树状数据转json数组的使用
     ```
     
-    const jsonArray = jtUtil.tree2Json(treeData, config);
+    jtUtil.tree2Json(treeData, config);
     
     默认 config = {        
         nodeParentIdField: 'parentId', //保存父亲节点唯一值的字段
