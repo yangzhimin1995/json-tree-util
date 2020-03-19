@@ -1,23 +1,15 @@
 {
   "name": "json-tree-util",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "json数组与树结构数组的互相转换",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yangzhimin1995/json-tree.git"
   },
   "keywords": [
     "json",
     "tree"
   ],
   "author": "YangZhiMin",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/yangzhimin1995/json-tree/issues"
-  },
-  "homepage": "https://github.com/yangzhimin1995/json-tree#readme"
+  "license": "ISC"
 }
