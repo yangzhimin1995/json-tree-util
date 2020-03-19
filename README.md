@@ -2,18 +2,10 @@
 ### json数组与树结构数组的互相转换
 
 #### 安装
-```
-
-npm install json-tree-util
-
-```
+`npm install json-tree-util`
 
 #### 引入
-```
-
-import jtUtil from "json-tree-util";
-
-```
+`import jtUtil from "json-tree-util";`
 
 
 #### json数组转树状数据的使用
