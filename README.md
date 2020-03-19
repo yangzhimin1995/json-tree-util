@@ -1,5 +1,5 @@
 # json-tree
-### json数组与树结构数组的互相转换
+### json数组与树状数据的互相转换
 
 #### 安装
 `npm install json-tree-util`
