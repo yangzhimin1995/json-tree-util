@@ -1,1 +1,55 @@
-"use strict";exports.json2Tree=function(e,d){d=Object.assign({nodeIdField:"id",nodeParentIdField:"parentId",topNodeValue:0,childrenField:"children",fieldMaps:{}},d||{});var i=JSON.parse(JSON.stringify(e));return function e(d,i,n){var r=[];return d.forEach(function(t){t[n.nodeParentIdField]===i&&(Object.keys(n.fieldMaps).forEach(function(e){t[n.fieldMaps[e]]=t[e]||void 0}),t[n.childrenField]=e(d,t[n.nodeIdField],n),r.push(t))}),r}(i,d.topNodeValue,d)||[]},exports.tree2Json=function(e,d){d=Object.assign({nodeParentIdField:"parentId",topNodeValue:0,childrenField:"children",fieldMaps:{},retainChildren:!1},d||{});var i=[],n=JSON.parse(JSON.stringify(e));return function e(i,n,r){i.forEach(function(i){i[d.nodeParentIdField]=n,Object.keys(d.fieldMaps).forEach(function(e){i[d.fieldMaps[e]]=i[e]||void 0}),Array.isArray(i[d.childrenField])&&(e(i[d.childrenField],i.id,r),!0!==d.retainChildren&&delete i[d.childrenField]),r.push(i)})}(n,d.topNodeValue,i),i};
+exports.json2Tree = function (jsonArray, config) {
+    const getChildren = (array, parentId, config) => {
+        let children = [];
+        array.forEach(node => {
+            if (node[config.nodeParentIdField] === parentId) {
+                Object.keys(config.fieldMaps).forEach(key => {
+                    node[config.fieldMaps[key]] = node[key] || undefined
+                });
+                node[config.childrenField] = getChildren(array, node[config.nodeIdField], config);
+                children.push(node);
+            }
+        });
+        return children;
+    };
+    let returnData;
+    config = Object.assign({
+        nodeIdField: 'id',
+        nodeParentIdField: 'parentId',
+        topNodeValue: 0,
+        childrenField: 'children',
+        fieldMaps: {}
+    }, config || {});
+    const array = JSON.parse(JSON.stringify(jsonArray));
+    returnData = getChildren(array, config.topNodeValue, config) || [];
+    return returnData
+};
+
+exports.tree2Json = function (treeData, config) {
+    const findChildren = (childrenData, parentId, returnData) => {
+        childrenData.forEach(node => {
+            node[config.nodeParentIdField] = parentId;
+            Object.keys(config.fieldMaps).forEach(key => {
+                node[config.fieldMaps[key]] = node[key] || undefined
+            });
+            if (Array.isArray(node[config.childrenField])) {
+                findChildren(node[config.childrenField], node.id, returnData);
+                if (config.retainChildren !== true) {
+                    delete node[config.childrenField]
+                }
+            }
+            returnData.push(node)
+        })
+    };
+    config = Object.assign({
+        nodeParentIdField: 'parentId',
+        topNodeValue: 0,
+        childrenField: 'children',
+        fieldMaps: {},
+        retainChildren: false
+    }, config || {});
+    let returnData = [];
+    const array = JSON.parse(JSON.stringify(treeData));
+    findChildren(array, config.topNodeValue, returnData);
+    return returnData
+};
