@@ -1,7 +1,7 @@
 {
   "name": "json-tree-util",
-  "version": "1.0.3",
-  "description": "json数组与树结构数组的互相转换",
+  "version": "1.0.4",
+  "description": "json数据与树状结构数据的转换等处理工具",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
