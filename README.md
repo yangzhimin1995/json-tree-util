@@ -1,5 +1,5 @@
-# json-tree
-### json数组与树状数据的互相转换
+# json-tree-util
+### json数据与树状数据的工具
 
 #### 安装
 `npm install json-tree-util`
@@ -8,100 +8,111 @@
 `import jtUtil from "json-tree-util"`
 
 
-#### json数组转树状数据的使用
+#### 组装树结构(json数组 转成 树状结构数据)
    ```
    
-   jtUtil.json2Tree(jsonArray, config);
+   jtUtil.parse(data, config);
    
    默认 config = {        
-       nodeIdField: 'id', //节点唯一值的字段
-       nodeParentIdField: 'parentId', //保存父亲节点唯一值的字段
-       topNodeValue: 0, //顶级节点的值
-       childrenField: 'children', //组装的子节点存放的字段
-       fieldMaps: {} //字段映射
+       idField: 'id', // 节点唯一值的字段
+       parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+       topNodeParentId: 0, // 顶级节点的父亲id
+       childrenField: 'children', // 组装的子节点存放的字段
+       handleNode: (node, children)=>{} // 节点处理方法
    }
-   
-   其中fieldMaps用来生成额外的字段，例如fieldMaps:{name:'label'},
-   如果数据中有'name'字段，那么返回的数据将会新增一个'label'字段，两者的值相同。
    
    
    使用示例：
    
-   const jsonArray = [
-                   {id: 1, name: '节点1', pid: 0},
-                   {id: 2, name: '节点1-1', pid: 1},
-                   {id: 3, name: '节点1-2', pid: 1},
-                   {id: 4, name: '节点1-1-1', pid: 2},
-                   {id: 5, name: '节点1-1-2', pid: 2},
-                  ];
-
-   const treeData = jtUtil.json2Tree(jsonArray, {nodeParentIdField: 'pid', fieldMaps: {name: 'label'}});
+   const testData = [
+       {nodeId: 1, name: '节点1', pid: null},
+       {nodeId: 2, name: '节点1-1', pid: 1},
+       {nodeId: 3, name: '节点1-2', pid: 1},
+       {nodeId: 4, name: '节点1-1-1', pid: 2},
+       {nodeId: 5, name: '节点1-1-2', pid: 2},
+   ];
    
-   console.log(treeData);
+   const handleNode = (node, children) => {
+       node['label'] = node.name;
+       node['isLeaf'] = children.length === 0;
+   }
+   
+   const treeData = parse(testData, {
+       idField: 'nodeId',
+       parentIdField: 'pid',
+       topNodeParentId: null,
+       childrenField: 'childrenList',
+       handleNode,
+   })
+
+   console.log(JSON.stringify(treeData))
    
    输出： 
 
    [{
-       id: 1,
-       name: "节点1",
-       pid: 0,
-       label: "节点1",
-       children: [{
-           id: 2,
-           name: "节点1-1",
-           pid: 1,
-           label: "节点1-1",
-           children: [{
-               id: 4,
-               name: "节点1-1-1",
-               pid: 2,
-               label: "节点1-1-1",
-               children: [],
+       "nodeId": 1,
+       "name": "节点1",
+       "pid": null,
+       "label": "节点1",
+       "isLeaf": false,
+       "childrenList": [{
+           "nodeId": 2,
+           "name": "节点1-1",
+           "pid": 1,
+           "label": "节点1-1",
+           "isLeaf": false,
+           "childrenList": [{
+               "nodeId": 4,
+               "name": "节点1-1-1",
+               "pid": 2,
+               "label": "节点1-1-1",
+               "isLeaf": true,
+               "childrenList": []
            }, {
-               id: 5,
-               name: "节点1-1-2",
-               pid: 2,
-               label: "节点1-1-2",
-               children: [],
-           }],
+               "nodeId": 5,
+               "name": "节点1-1-2",
+               "pid": 2,
+               "label": "节点1-1-2",
+               "isLeaf": true,
+               "childrenList": []
+           }]
        }, {
-           id: 3,
-           name: "节点1-2",
-           pid: 1,
-           label: "节点1-2",
-           children: [],
-       }],
+           "nodeId": 3,
+           "name": "节点1-2",
+           "pid": 1,
+           "label": "节点1-2",
+           "isLeaf": true,
+           "childrenList": []
+       }]
    }]
    
    ```
 
-#### 树状数据转json数组的使用
+#### 拆解树结构(树状结构数据 转成 json数组)
     ```
     
-    jtUtil.tree2Json(treeData, config);
+    jtUtil.jsonify(data, config);
     
     默认 config = {        
-        nodeParentIdField: 'parentId', //保存父亲节点唯一值的字段
-        topNodeValue: 0, //顶级节点的值
-        childrenField: 'children', //组装的子节点存放的字段
-        fieldMaps: {}, //字段映射
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        topNodeParentId: 0, // 顶级节点的父亲id
+        childrenField: 'children', // 组装的子节点存放的字段
         retainChildren: false //是否保留子节点数据
+        handleNode: (node, children)=>{} // 节点处理方法
     }
-    
-    fieldMaps参数用法同上
     
     
     使用示例：
     
-    const treeData = [{
+    const testData = [{
         id: 1,
         name: "节点1",
-        pid: 0,
-        children: [{
+        pid: null,
+        childrenList: [{
             id: 2,
             name: "节点1-1",
             pid: 1,
-            children: [{
+            childrenList: [{
                 id: 4,
                 name: "节点1-1-1",
                 pid: 2,
@@ -117,9 +128,20 @@
         }],
     }];
     
-    let jsonArray = jtUtil.tree2Json(treeData, {topNodeValue: null, nodeParentIdField: 'pid'});
+    const handleNode = (node, children) => {
+        node['label'] = node.name;
+        node['isLeaf'] = children.length === 0;
+    }
     
-    console.log(jsonArray);
+    const returnData = jsonify(testData, {
+        parentIdField: 'pid',
+        topNodeParentId: null,
+        childrenField: 'childrenList',
+        retainChildren: false,
+        handleNode,
+    })
+    
+    console.log(JSON.stringify(returnData))
     
     输出：
     
