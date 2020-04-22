@@ -1,5 +1,5 @@
 # json-tree-util
-### json数据与树状结构数据的工具
+### json数据与树状结构数据的转换等处理工具
 
 #### 安装
 `npm install json-tree-util`
