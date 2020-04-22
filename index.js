@@ -36,8 +36,8 @@ exports.parse = function (jsonArray, config = {}) {
 
 let data = []
 
-const jsonify_findChildren = (data, parentId, config) => {
-    data.forEach(node => {
+const jsonify_findChildren = (childrenList, parentId, config) => {
+    childrenList.forEach(node => {
         node[config.parentIdField] = parentId;
         const children = node[config.childrenField] || []
         if (config.handleNode) {
