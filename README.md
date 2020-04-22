@@ -37,7 +37,7 @@
        node['isLeaf'] = children.length === 0;
    }
    
-   const treeData = parse(testData, {
+   const returnData = jtUtil.parse(testData, {
        idField: 'nodeId',
        parentIdField: 'pid',
        topNodeParentId: null,
@@ -45,7 +45,7 @@
        handleNode,
    })
 
-   console.log(JSON.stringify(treeData))
+   console.log(JSON.stringify(returnData))
    
    输出： 
 
@@ -133,7 +133,7 @@
         node['isLeaf'] = children.length === 0;
     }
     
-    const returnData = jsonify(testData, {
+    const returnData = jtUtil.jsonify(testData, {
         parentIdField: 'pid',
         topNodeParentId: null,
         childrenField: 'childrenList',
