@@ -8,7 +8,7 @@
 `import jtUtil from "json-tree-util"`
 
 
-#### 组装树结构(json数组 转成 树状结构数据)
+#### 组装树结构(json数据 转成 树状结构数据)
    ```
    
    jtUtil.parse(data, config);
@@ -88,7 +88,7 @@
    
    ```
 
-#### 拆解树结构(树状结构数据 转成 json数组)
+#### 拆解树结构(树状结构数据 转成 json数据)
     ```
     
     jtUtil.jsonify(data, config);
@@ -97,7 +97,7 @@
         parentIdField: 'parentId', // 保存父亲节点唯一值的字段
         topNodeParentId: 0, // 顶级节点的父亲id
         childrenField: 'children', // 组装的子节点存放的字段
-        retainChildren: false //是否保留子节点数据
+        retainChildren: false // 是否保留子节点数据
         handleNode: (node, children)=>{} // 节点处理方法
     }
     
