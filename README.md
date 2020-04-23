@@ -1,17 +1,21 @@
-# json-tree-util
+# json-tree-utils
 ### json数组与树状结构数据的转换等处理工具
 
 #### 安装
-`npm install json-tree-util`
+`
+npm i json-tree-utils
+`
 
 #### 引入
-`import jtUtil from "json-tree-util"`
+`
+import jtUtils from "json-tree-utils"
+`
 
 
 #### 组装树结构(json数组 转成 树状结构数据)
    ```
    
-    jtUtil.parse(data, options);
+    jtUtils.parse(data, options);
 
     data: json数组，数据里面包含上下级父子关系
     options: 可选配置项
@@ -40,7 +44,7 @@
        node['isLeaf'] = children.length === 0;
     }
     
-    const returnData = jtUtil.parse(testData, {
+    const returnData = jtUtils.parse(testData, {
        idField: 'nodeId',
        parentIdField: 'pid',
        topNodeParentId: null,
@@ -94,7 +98,7 @@
 #### 拆解树结构(树状结构数据 转成 json数组)
     ```
     
-    jtUtil.jsonify(data, options);
+    jtUtils.jsonify(data, options);
     
     data: 树状结构数据
     options: 可选配置项
@@ -139,7 +143,7 @@
         node['isLeaf'] = children.length === 0;
     }
     
-    const returnData = jtUtil.jsonify(testData, {
+    const returnData = jtUtils.jsonify(testData, {
         parentIdField: 'pid',
         topNodeParentId: null,
         childrenField: 'childrenList',
@@ -164,7 +168,7 @@
 #### 在json数组中寻找某目标节点的所有父亲节点
     ```
     
-    jtUtil.findParentsInJson(id, data, options);
+    jtUtils.findParentsInJson(id, data, options);
     
     默认 options = {
         idField: 'id',
@@ -185,7 +189,7 @@
         {nodeId: 5, name: '节点1-1-2', pid: 2},
     ];
     
-    const returnData = jtUtil.findParentsInJson(5, testData, {
+    const returnData = jtUtils.findParentsInJson(5, testData, {
         idField: 'nodeId',
         parentIdField: 'pid',
         topNodeParentId: null,
