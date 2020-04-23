@@ -128,8 +128,8 @@ import jtUtils from "json-tree-utils"
     
     默认 options = {        
         idField: 'id', // 节点ID存放的字段
-        parentIdField: 'parentId', // 父节点存放的字段
-        topNodeParentId: 0, // 顶级节点的父亲id
+        parentIdField: '', // 父节点存放的字段
+        topNodeParentId: undefined, // 顶级节点的父亲id
         childrenField: 'children', // 子节点存放的字段
         remainChildren: false, // 是否保留子节点数据
         handleNode: (node, children)=>{} // 节点处理方法

@@ -37,7 +37,9 @@ let globalData = []
 
 const jsonify_findChildren = (data, parentId, options) => {
     data.forEach(node => {
-        node[options.parentIdField] = parentId
+        if (options.parentIdField) {
+            node[options.parentIdField] = parentId
+        }
         const children = node[options.childrenField] || []
         if (options.handleNode) {
             options.handleNode(node, children)
@@ -55,8 +57,8 @@ const jsonify_findChildren = (data, parentId, options) => {
 const jsonify = function (data, options = {}) {
     options = Object.assign({
         idField: 'id',
-        parentIdField: 'parentId',
-        topNodeParentId: 0,
+        parentIdField: '',
+        topNodeParentId: undefined,
         childrenField: 'children',
         remainChildren: false,
         handleNode: null
