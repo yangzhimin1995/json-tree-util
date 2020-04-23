@@ -1,8 +1,7 @@
 # json-tree-utils
+
 ### json数组与树状结构数据的转换等处理工具
 
-#### GitHub
-[https://github.com/yangzhimin1995/json-tree-utils](https://github.com/yangzhimin1995/json-tree-utils "GitHub")
 
 #### 安装
 ```
@@ -177,13 +176,19 @@ import jtUtils from "json-tree-utils"
     
     jtUtils.findParentsInJson(id, data, options);
     
+    id: 目标节点的唯一值
+    data: json数组
+    options: 可选配置项
+    
     默认 options = {
-        idField: 'id',
+        idField: 'id', // 节点唯一值的字段
         parentIdField: 'parentId', // 保存父亲节点唯一值的字段
         topNodeParentId: 0, // 顶级节点的父亲id
         returnType: 'id', // 返回类型 id:返回id数组  json:返回json数组  tree:返回树状结构数据
         remainNode: true, // 是否将该目标节点一起返回
-    }
+        childrenField: 'children', // 组装的子节点存放的字段，returnType = 'tree' 时有效
+        handleNode: (node, children)=>{} // 节点处理方法，returnType = 'tree' 时有效
+    }                                    
     
     
     使用示例：
@@ -234,5 +239,86 @@ import jtUtils from "json-tree-utils"
             }]
         }]
     }]
+    
+    ```
+    
+#### 在json数组中寻找某目标节点的所有子节点
+    ```
+    
+    jtUtils.findChildrenInJson(id, data, options);
+    
+    id: 目标节点的唯一值
+    data: json数组
+    options: 可选配置项
+    
+    默认 options = {
+        idField: 'id', // 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        returnType: 'id',  // 返回类型 id:返回id数组  json:返回json数组  tree:返回树状结构数据
+        remainNode: true, // 是否将该目标节点一起返回
+        childrenField: 'children', // 组装的子节点存放的字段，returnType = 'tree' 时有效
+        handleNode: (node, children)=>{} // 节点处理方法，returnType = 'tree' 时有效
+    }                                    
+    
+    
+    使用示例：
+    
+    const testData = [
+        {nodeId: 1, name: '节点1', pid: null},
+        {nodeId: 2, name: '节点1-1', pid: 1},
+        {nodeId: 3, name: '节点1-2', pid: 1},
+        {nodeId: 4, name: '节点1-1-1', pid: 2},
+        {nodeId: 5, name: '节点1-1-2', pid: 2},
+    ];
+    
+    const returnData = findChildrenInJson(1, testData, {
+        idField: 'nodeId',
+        parentIdField: 'pid',
+        childrenField: 'childrenList',
+        returnType: 'tree',
+    })
+    
+    console.log(JSON.stringify(returnData))
+    
+    // returnType = 'id' 输出
+    [1,2,4,5,3]
+    
+    // returnType = 'json' 输出
+    [
+        {"nodeId":1,"name":"节点1","pid":null},
+        {"nodeId":2,"name":"节点1-1","pid":1},
+        {"nodeId":4,"name":"节点1-1-1","pid":2},
+        {"nodeId":5,"name":"节点1-1-2","pid":2},
+        {"nodeId":3,"name":"节点1-2","pid":1}
+    ]
+
+    
+    // returnType = 'tree' 输出
+    {
+        "nodeId": 1,
+        "name": "节点1",
+        "pid": null,
+        "childrenList": [{
+            "nodeId": 2,
+            "name": "节点1-1",
+            "pid": 1,
+            "childrenList": [{
+                "nodeId": 4,
+                "name": "节点1-1-1",
+                "pid": 2,
+                "childrenList": []
+            }, {
+                "nodeId": 5,
+                "name": "节点1-1-2",
+                "pid": 2,
+                "childrenList": []
+            }]
+        }, {
+            "nodeId": 3,
+            "name": "节点1-2",
+            "pid": 1,
+            "childrenList": []
+        }]
+    }
     
     ```
