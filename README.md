@@ -1,5 +1,5 @@
 # json-tree-util
-### json数据与树状结构数据的转换等处理工具
+### json数组与树状结构数据的转换等处理工具
 
 #### 安装
 `npm install json-tree-util`
@@ -8,7 +8,7 @@
 `import jtUtil from "json-tree-util"`
 
 
-#### 组装树结构(json数据 转成 树状结构数据)
+#### 组装树结构(json数组 转成 树状结构数据)
    ```
    
     jtUtil.parse(data, options);
@@ -91,7 +91,7 @@
    
    ```
 
-#### 拆解树结构(树状结构数据 转成 json数据)
+#### 拆解树结构(树状结构数据 转成 json数组)
     ```
     
     jtUtil.jsonify(data, options);
