@@ -102,7 +102,7 @@ import jtUtils from "json-tree-utils"
    ```
 
 #### 拆解树结构(树状结构数据 转成 json数组)
-    ```
+   ```
     
     jtUtils.jsonify(data, options);
     
@@ -169,10 +169,10 @@ import jtUtils from "json-tree-utils"
         {"id": 1, "name": "节点1", "pid": null}
     ]
     
-    ```
+   ```
     
 #### 在json数组中寻找某目标节点的所有父亲节点
-    ```
+   ```
     
     jtUtils.findParentsInJson(id, data, options);
     
@@ -240,10 +240,10 @@ import jtUtils from "json-tree-utils"
         }]
     }]
     
-    ```
+   ```
     
 #### 在json数组中寻找某目标节点的所有子节点
-    ```
+   ```
     
     jtUtils.findChildrenInJson(id, data, options);
     
@@ -321,4 +321,4 @@ import jtUtils from "json-tree-utils"
         }]
     }
     
-    ```
+   ```
