@@ -17,11 +17,11 @@ const parse_getChildren = (data, parentId, options) => {
 
 const parse = function (data, options = {}) {
     options = Object.assign({
-        idField: 'id',
-        parentIdField: 'parentId',
-        topNodeParentId: 0,
-        childrenField: 'children',
-        handleNode: null
+        idField: 'id', // 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        topNodeParentId: 0, // 顶级节点的父亲id
+        childrenField: 'children', // 组装的子节点存放的字段
+        handleNode: null // 节点处理方法
     }, options);
     let returnData;
     returnData = parse_getChildren(data, options.topNodeParentId, options) || [];
@@ -42,7 +42,7 @@ const jsonify_findChildren = (data, parentId, options) => {
             options.handleNode(node, children)
         }
         if (Array.isArray(children)) {
-            jsonify_findChildren(children, node.id, options);
+            jsonify_findChildren(children, node[options.idField], options);
             if (options.remainChildren !== true) {
                 delete node[options.childrenField]
             }
@@ -53,10 +53,11 @@ const jsonify_findChildren = (data, parentId, options) => {
 
 const jsonify = function (data, options = {}) {
     options = Object.assign({
-        parentIdField: 'parentId',
-        childrenField: 'children',
-        remainChildren: false,
-        handleNode: null
+        idField: 'id',// 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        childrenField: 'children', // 组装的子节点存放的字段
+        remainChildren: false, // 是否保留子节点数据
+        handleNode: null // 节点处理方法
     }, options);
     globalData = [];
     jsonify_findChildren(data, options.topNodeParentId, options);
@@ -92,10 +93,13 @@ const findParentsInJson_id = (id, data, options, remainNode) => {
 
 const findParentsInJson = function (id, data, options) {
     options = Object.assign({
-        idField: 'id',
-        parentIdField: 'parentId',
-        returnType: 'id',
-        remainNode: true,
+        idField: 'id', // 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        returnType: 'id', // 返回类型 id:返回id数组  json:返回json数组  tree:返回树状结构数据
+        remainNode: true, // 是否将该目标节点一起返回
+        topNodeParentId: 0, // 顶级节点的父亲id，returnType = 'tree' 时必须指定
+        childrenField: 'children', // 组装的子节点存放的字段，returnType = 'tree' 时有效
+        handleNode: null // 节点处理方法，returnType = 'tree' 时有效
     }, options);
     globalData = [];
     switch (options.returnType) {
@@ -137,11 +141,12 @@ const findChildrenInJson_id = (id, data, options) => {
 
 const findChildrenInJson = (id, data, options) => {
     options = Object.assign({
-        idField: 'id',
-        parentIdField: 'parentId',
-        childrenField: 'children',
-        returnType: 'id',
-        remainNode: true,
+        idField: 'id', // 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        returnType: 'id',  // 返回类型 id:返回id数组  json:返回json数组  tree:返回树状结构数据
+        remainNode: true, // 是否将该目标节点一起返回
+        childrenField: 'children', // 组装的子节点存放的字段，returnType = 'tree' 时有效
+        handleNode: null // 节点处理方法，returnType = 'tree' 时有效
     }, options);
     globalData = [];
     let node;
@@ -180,11 +185,13 @@ const findChildrenInJson = (id, data, options) => {
 
 const findParentsInTree = (id, data, options) => {
     options = Object.assign({
-        idField: 'id',
-        parentIdField: 'parentId',
-        childrenField: 'children',
-        returnType: 'id',
-        remainNode: true,
+        idField: 'id', // 节点唯一值的字段
+        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
+        childrenField: 'children', // 组装的子节点存放的字段
+        returnType: 'id', // 返回类型 id:返回id数组  json:返回json数组  tree:返回树状结构数据
+        remainNode: true, // 是否将该目标节点一起返回
+        topNodeParentId: 0, // 顶级节点的父亲id，returnType = 'tree' 时必须指定
+        handleNode: null // 节点处理方法，returnType = 'tree' 时有效
     }, options);
     const jsonArray = jsonify(data, options);
     findParentsInJson(id, jsonArray, options)
