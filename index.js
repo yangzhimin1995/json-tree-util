@@ -121,51 +121,6 @@ const findParentsInJson = function (id, data, options) {
     return globalData
 }
 
-const testData = [
-    {nodeId: 1, name: '节点1', pid: null},
-    {nodeId: 2, name: '节点1-1', pid: 1},
-    {nodeId: 3, name: '节点1-2', pid: 1},
-    {nodeId: 4, name: '节点1-1-1', pid: 2},
-    {nodeId: 5, name: '节点1-1-2', pid: 2},
-];
-
-const a = findParentsInJson(5, testData, {
-    idField: 'nodeId',
-    parentIdField: 'pid',
-    topNodeParentId: null,
-    returnType: 'tree', //id json tree
-})
-
-console.log(JSON.stringify(a))
-
-//返回id
-//     [1,2,5]
-
-//返回json数组
-//     [
-//         {"nodeId":1,"name":"节点1","pid":null},
-//         {"nodeId":2,"name":"节点1-1","pid":1},
-//         {"nodeId":5,"name":"节点1-1-2","pid":2}
-//     ]
-
-//返回树状结构
-//     [{
-//         "nodeId": 1,
-//         "name": "节点1",
-//         "pid": null,
-//         "children": [{
-//             "nodeId": 2,
-//             "name": "节点1-1",
-//             "pid": 1,
-//             "children": [{
-//                 "nodeId": 5,
-//                 "name": "节点1-1-2",
-//                 "pid": 2,
-//                 "children": []
-//             }]
-//         }]
-//     }]
-
 /** ========================== 在json数据中查找某个节点的父亲节点 ========================== **/
 
 exports = {parse, jsonify, findParentsInJson}
