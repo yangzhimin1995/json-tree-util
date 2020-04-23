@@ -1,6 +1,6 @@
 {
   "name": "json-tree-util",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "json数据与树状结构数据的转换等处理工具",
   "main": "index.js",
   "scripts": {

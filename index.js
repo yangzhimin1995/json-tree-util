@@ -45,7 +45,7 @@ const jsonify_findChildren = (data, parentId, options) => {
         }
         if (Array.isArray(children)) {
             jsonify_findChildren(children, node.id, options);
-            if (options.retainChildren !== true) {
+            if (options.remainChildren !== true) {
                 delete node[options.childrenField]
             }
         }
@@ -58,7 +58,7 @@ const jsonify = function (treeData, options = {}) {
         parentIdField: 'parentId',
         topNodeParentId: 0,
         childrenField: 'children',
-        retainChildren: false,
+        remainChildren: false,
         handleNode: null
     }, options);
     globalData = [];
@@ -123,4 +123,4 @@ const findParentsInJson = function (id, data, options) {
 
 /** ========================== 在json数据中查找某个节点的父亲节点 ========================== **/
 
-exports = {parse, jsonify, findParentsInJson}
+module.exports = {parse, jsonify, findParentsInJson}
