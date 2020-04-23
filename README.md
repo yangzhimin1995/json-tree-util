@@ -196,17 +196,17 @@
     
     console.log(JSON.stringify(returnData))
     
-    // returnType为'id' 返回
+    // returnType = 'id' 输出
     [1,2,5]
     
-    // returnType为'json' 返回
+    // returnType = 'json' 输出
     [
         {"nodeId":1,"name":"节点1","pid":null},
         {"nodeId":2,"name":"节点1-1","pid":1},
         {"nodeId":5,"name":"节点1-1-2","pid":2}
     ]
     
-    // returnType为'tree' 返回
+    // returnType = 'tree' 输出
     [{
         "nodeId": 1,
         "name": "节点1",
