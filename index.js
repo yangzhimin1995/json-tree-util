@@ -37,7 +37,6 @@ let globalData = []
 
 const jsonify_findChildren = (data, parentId, options) => {
     data.forEach(node => {
-        node[options.parentIdField] = parentId;
         const children = node[options.childrenField] || []
         if (options.handleNode) {
             options.handleNode(node, children)
@@ -55,7 +54,6 @@ const jsonify_findChildren = (data, parentId, options) => {
 const jsonify = function (data, options = {}) {
     options = Object.assign({
         parentIdField: 'parentId',
-        topNodeParentId: 0,
         childrenField: 'children',
         remainChildren: false,
         handleNode: null
@@ -76,9 +74,7 @@ const findParentsInJson_json = (id, data, options, remainNode) => {
             if (remainNode) {
                 globalData.unshift(node);
             }
-            if (node[options.parentIdField] !== options.topNodeParentId) {
-                findParentsInJson_json(node[options.parentIdField], data, options, true)
-            }
+            findParentsInJson_json(node[options.parentIdField], data, options, true)
         }
     })
 }
@@ -89,9 +85,7 @@ const findParentsInJson_id = (id, data, options, remainNode) => {
             if (remainNode) {
                 globalData.unshift(node[options.idField]);
             }
-            if (node[options.parentIdField] !== options.topNodeParentId) {
-                findParentsInJson_id(node[options.parentIdField], data, options, true)
-            }
+            findParentsInJson_id(node[options.parentIdField], data, options, true)
         }
     })
 }
@@ -100,7 +94,6 @@ const findParentsInJson = function (id, data, options) {
     options = Object.assign({
         idField: 'id',
         parentIdField: 'parentId',
-        topNodeParentId: 0,
         returnType: 'id',
         remainNode: true,
     }, options);
@@ -182,4 +175,22 @@ const findChildrenInJson = (id, data, options) => {
 
 /** ========================== 在json数据中查找某个节点的子节点 ========================== **/
 
-module.exports = {parse, jsonify, findParentsInJson, findChildrenInJson}
+
+/** ========================== 在树状结构数据中查找某个节点的父亲节点 ========================== **/
+
+const findParentsInTree = (id, data, options) => {
+    options = Object.assign({
+        idField: 'id',
+        parentIdField: 'parentId',
+        childrenField: 'children',
+        returnType: 'id',
+        remainNode: true,
+    }, options);
+    const jsonArray = jsonify(data, options);
+    findParentsInJson(id, jsonArray, options)
+    return globalData
+}
+
+/** ========================== 在树状结构数据中中查找某个节点的父亲节点 ========================== **/
+
+module.exports = {parse, jsonify, findParentsInJson, findChildrenInJson, findParentsInTree}
