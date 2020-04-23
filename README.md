@@ -17,39 +17,72 @@ import jtUtils from "json-tree-utils"
 
 ```
 
-#### 测试数据
+#### 准备点测试数据
    ```
     const list = [
-       {nodeId: 1, name: '节点1', pid: null},
-       {nodeId: 2, name: '节点1-1', pid: 1},
-       {nodeId: 3, name: '节点1-2', pid: 1},
-       {nodeId: 4, name: '节点1-1-1', pid: 2},
-       {nodeId: 5, name: '节点1-1-2', pid: 2},
-    ];
+        {id: 1, name: "一级 1", parentId: 0},
+        {id: 2, name: "二级 1-1", parentId: 1},
+        {id: 3, name: "三级 1-1-1", parentId: 2},
+        {id: 4, name: "一级 2", parentId: 0},
+        {id: 5, name: "二级 2-1", parentId: 4},
+        {id: 6, name: "三级 2-1-1", parentId: 5},
+        {id: 7, name: "二级 2-2", parentId: 4},
+        {id: 8, name: "三级 2-2-1", parentId: 7},
+        {id: 9, name: "一级 3", parentId: 0},
+        {id: 10, name: "二级 3-1", parentId: 9},
+        {id: 11, name: "三级 3-1-1", parentId: 10},
+        {id: 12, name: "二级 3-2", parentId: 9},
+        {id: 13, name: "三级 3-2-1", parentId: 12},
+    ]
 
-    const testData = [{
-        nodeId: 1,
-        name: "节点1",
-        pid: null,
-        childrenList: [{
-            nodeId: 2,
-            name: "节点1-1",
-            pid: 1,
-            childrenList: [{
-                nodeId: 4,
-                name: "节点1-1-1",
-                pid: 2,
-            }, {
-                nodeId: 5,
-                name: "节点1-1-2",
-                pid: 2,
-            }],
+    const treeData = [{
+        id:1,
+        name: '一级 1',
+        children: [{
+            id:2,
+            name: '二级 1-1',
+            children: [{
+                id:3,
+                name: '三级 1-1-1'
+            }]
+        }]
+    }, {
+        id:4,
+        name: '一级 2',
+        children: [{
+            id:5,
+            name: '二级 2-1',
+            children: [{
+                id:6,
+                name: '三级 2-1-1'
+            }]
         }, {
-            nodeId: 3,
-            name: "节点1-2",
-            pid: 1,
-        }],
-    }];    
+            id:7,
+            name: '二级 2-2',
+            children: [{
+                id:8,
+                name: '三级 2-2-1'
+            }]
+        }]
+    }, {
+        id:9,
+        name: '一级 3',
+        children: [{
+            id:10,
+            name: '二级 3-1',
+            children: [{
+                id:11,
+                name: '三级 3-1-1'
+            }]
+        }, {
+            id:12,
+            name: '二级 3-2',
+            children: [{
+                id:13,
+                name: '三级 3-2-1'
+            }]
+        }]
+    }];  
 
    ```
 
@@ -78,10 +111,6 @@ import jtUtils from "json-tree-utils"
     }
     
     const data = jtUtils.parse(list, {
-       idField: 'nodeId',
-       parentIdField: 'pid',
-       topNodeParentId: null,
-       childrenField: 'childrenList',
        handleNode,
     })
     
@@ -114,10 +143,6 @@ import jtUtils from "json-tree-utils"
     }
     
     const data = jtUtils.jsonify(treeData, {
-        idField: 'nodeId',
-        parentIdField: 'pid',
-        childrenField: 'childrenList',
-        remainChildren: false,
         handleNode,
     })
     
@@ -147,11 +172,7 @@ import jtUtils from "json-tree-utils"
     
     使用示例：
     
-    const data = jtUtils.findParentsInJson(5, list, {
-        idField: 'nodeId',
-        parentIdField: 'pid',
-        returnType: 'id'
-    })
+    const data = jtUtils.findParentsInJson(5, list)
     
     console.log(JSON.stringify(data))
     
@@ -178,14 +199,9 @@ import jtUtils from "json-tree-utils"
     
     使用示例：
     
-    const returnData = findChildrenInJson(1, list, {
-        idField: 'nodeId',
-        parentIdField: 'pid',
-        childrenField: 'childrenList',
-        returnType: 'id',
-    })
+    const data = jtUtils.findChildrenInJson(1, list)
     
-    console.log(JSON.stringify(returnData))
+    console.log(JSON.stringify(data))
     
    ```
 
@@ -211,12 +227,7 @@ import jtUtils from "json-tree-utils"
     
     使用示例：
 
-    const data = findParentsInTree(5, treeData, {
-        parentIdField: 'pid',
-        topNodeParentId: null,
-        childrenField: 'childrenList',
-        returnType: 'id',
-    })
+    const data = jtUtils.findParentsInTree(5, treeData)
     
     console.log(JSON.stringify(data))
     
