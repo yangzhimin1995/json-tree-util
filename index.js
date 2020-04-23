@@ -54,12 +54,12 @@ const jsonify_findChildren = (data, parentId, options) => {
 
 const jsonify = function (data, options = {}) {
     options = Object.assign({
-        idField: 'id',// 节点唯一值的字段
-        parentIdField: 'parentId', // 保存父亲节点唯一值的字段
-        topNodeParentId: 0, // 顶级节点的父亲id
-        childrenField: 'children', // 组装的子节点存放的字段
-        remainChildren: false, // 是否保留子节点数据
-        handleNode: null // 节点处理方法
+        idField: 'id',
+        parentIdField: 'parentId',
+        topNodeParentId: 0,
+        childrenField: 'children',
+        remainChildren: false,
+        handleNode: null
     }, options);
     globalData = [];
     jsonify_findChildren(data, options.topNodeParentId, options);
