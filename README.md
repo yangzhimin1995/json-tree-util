@@ -1,15 +1,22 @@
 # json-tree-utils
 ### json数组与树状结构数据的转换等处理工具
 
+#### GitHub
+[https://github.com/yangzhimin1995/json-tree-utils](https://github.com/yangzhimin1995/json-tree-utils "GitHub")
+
 #### 安装
-`
+```
+
 npm i json-tree-utils
-`
+
+```
 
 #### 引入
-`
+```
+
 import jtUtils from "json-tree-utils"
-`
+
+```
 
 
 #### 组装树结构(json数组 转成 树状结构数据)
