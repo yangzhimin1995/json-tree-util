@@ -66,3 +66,7 @@ const treeData = [{
 }];
 
 
+const a = jtUtils.json.findChildren(1, list,{
+    remainNode:false
+})
+console.log(JSON.stringify(a))
