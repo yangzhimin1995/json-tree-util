@@ -57,8 +57,8 @@ const tj_findChildren = (data, parentId, options, returnData) => {
 tree.jsonify = function (data, options = {}) {
     options = Object.assign({
         idField: 'id',
-        parentIdField: '',
-        topNodeParentId: undefined,
+        // parentIdField: '',
+        // topNodeParentId: undefined,
         childrenField: 'children',
         remainChildren: false,
         handleNode: null
@@ -166,5 +166,41 @@ json.findChildren = (id, data, options) => {
 }
 
 /** ========================== 在json数组中寻找某目标节点的子节点，返回json数组 ========================== **/
+
+
+/** ========================== 在树结构数据中寻找某目标节点的父节点，返回id数组 ========================== **/
+
+tree.findParentIds = (id, data, options) => {
+    options = Object.assign({
+        // idField: 'id',
+        // parentIdField: '',
+        // topNodeParentId: undefined,
+        // childrenField: 'children',
+        // handleNode: null,
+        // remainNode: false,
+    }, options);
+    const jsonData = tree.jsonify(data);
+    return json.findParentIds(id, jsonData, options)
+}
+
+/** ========================== 在树结构数据中寻找某目标节点的父节点，返回id数组 ========================== **/
+
+
+/** ========================== 在树结构数据中寻找某目标节点的父节点，返回json数组 ========================== **/
+
+tree.findParents = (id, data, options) => {
+    // options = Object.assign({
+    //     idField: 'id',
+    //     parentIdField: '',
+    //     topNodeParentId: undefined,
+    //     childrenField: 'children',
+    //     handleNode: null,
+    //     remainNode: false,
+    // }, options);
+    const jsonData = tree.jsonify(data);
+    return json.findParents(id, jsonData, options)
+}
+
+/** ========================== 在树结构数据中寻找某目标节点的父节点，返回json数组 ========================== **/
 
 module.exports = {json, tree}
