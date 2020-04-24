@@ -65,8 +65,11 @@ const treeData = [{
     }]
 }];
 
-
-const data = jtUtils.json.findParents(13, list, {
-    remainNode: true
-})
+const handleFilter = (node) => {
+    if (node.name.indexOf('-2-') !== -1) {
+        node['isTargetNode'] = true;
+        return node
+    }
+}
+const data = jtUtils.json.filter(list, handleFilter, {})
 console.log(JSON.stringify(data))

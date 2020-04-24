@@ -1,22 +1,22 @@
-const json = {};
-const tree = {};
+const json = {}
+const tree = {}
 
 /** ========================== 组装树结构 ========================== **/
 
 const jp_findChildren = (data, parentId, options) => {
-    let returnData = [];
+    let returnData = []
     data.forEach(node => {
         if (node[options.parentIdField] === parentId) {
-            const children = jp_findChildren(data, node[options.idField], options);
+            const children = jp_findChildren(data, node[options.idField], options)
             if (options.handleNode) {
                 options.handleNode(node, children)
             }
-            node[options.childrenField] = children;
-            returnData.push(node);
+            node[options.childrenField] = children
+            returnData.push(node)
         }
-    });
-    return returnData;
-};
+    })
+    return returnData
+}
 
 json.parse = function (data, options = {}) {
     options = Object.assign({
@@ -25,11 +25,11 @@ json.parse = function (data, options = {}) {
         topNodeParentId: 0,
         childrenField: 'children',
         handleNode: null
-    }, options);
-    let returnData;
-    returnData = jp_findChildren(data, options.topNodeParentId, options) || [];
+    }, options)
+    let returnData
+    returnData = jp_findChildren(data, options.topNodeParentId, options) || []
     return returnData
-};
+}
 
 /** ========================== 组装树结构 ========================== **/
 
@@ -46,29 +46,66 @@ const tj_findChildren = (data, parentId, options, returnData) => {
         if (options.handleNode) {
             options.handleNode(node, children)
         }
-        tj_findChildren(children, node[options.idField], options, returnData);
+        tj_findChildren(children, node[options.idField], options, returnData)
         if (options.remainChildren !== true) {
             delete node[options.childrenField]
         }
         returnData.push(node)
     })
-};
+}
 
 tree.jsonify = function (data, options = {}) {
     options = Object.assign({
         idField: 'id',
-        // parentIdField: '',
-        // topNodeParentId: undefined,
+        parentIdField: 'parentId',
+        topNodeParentId: 0,
         childrenField: 'children',
         remainChildren: false,
         handleNode: null
-    }, options);
-    const returnData = [];
-    tj_findChildren(data, options.topNodeParentId, options, returnData);
+    }, options)
+    const returnData = []
+    tj_findChildren(data, options.topNodeParentId, options, returnData)
     return returnData
-};
+}
 
 /** ========================== 拆解树结构 ========================== **/
+
+
+/** ========================== 在json数组中过滤目标节点，返回所有目标节点以及该节点的所有父节点 ========================== **/
+
+json.filter = (data, handleFilter, options) => {
+    options = Object.assign({
+        idField: 'id',
+        parentIdField: 'parentId',
+    }, options)
+    let filterData = data.filter(node => {
+        if (handleFilter) {
+            return handleFilter(node)
+        }
+        return node
+    })
+    const tempJson = {};
+    const findParents = (data, parentId, options, tempJson) => {
+        data.forEach(node => {
+            const id = node[options.idField]
+            if (id === parentId) {
+                tempJson[node[options.idField]] = node;
+                findParents(data, node[options.parentIdField], options, tempJson)
+            }
+        })
+    }
+    filterData.forEach(targetNode => {
+        tempJson[targetNode[options.idField]] = targetNode;
+        findParents(data, targetNode[options.parentIdField], options, tempJson)
+    });
+    const returnData = []
+    Object.keys(tempJson).forEach(key => {
+        returnData.push(tempJson[key]);
+    })
+    return returnData
+}
+
+/** ========================== 在json数组中过滤目标节点，返回所有目标节点以及该节点的所有父节点 ========================== **/
 
 /** ========================== 在json数组中寻找某目标节点的父节点，返回id数组 ========================== **/
 
@@ -78,9 +115,9 @@ const jf_findParents = (data, parentId, remainNode, options, returnData, type = 
         if (id === parentId) {
             if (remainNode) {
                 if (type === 'id') {
-                    returnData.unshift(id);
+                    returnData.unshift(id)
                 } else {
-                    returnData.unshift(node);
+                    returnData.unshift(node)
                 }
             }
             jf_findParents(data, node[options.parentIdField], true, options, returnData, type)
@@ -93,9 +130,9 @@ json.findParentIds = (id, data, options) => {
         idField: 'id',
         parentIdField: 'parentId',
         remainNode: false,
-    }, options);
-    let returnData = [];
-    jf_findParents(data, id, options.remainNode, options, returnData);
+    }, options)
+    let returnData = []
+    jf_findParents(data, id, options.remainNode, options, returnData)
     return returnData
 }
 
@@ -109,9 +146,9 @@ json.findParents = (id, data, options) => {
         idField: 'id',
         parentIdField: 'parentId',
         remainNode: false,
-    }, options);
-    let returnData = [];
-    jf_findParents(data, id, options.remainNode, options, returnData, 'node');
+    }, options)
+    let returnData = []
+    jf_findParents(data, id, options.remainNode, options, returnData, 'node')
     return returnData
 }
 
@@ -122,13 +159,13 @@ json.findParents = (id, data, options) => {
 
 const jf_findChildren = (data, nodeId, remainNode, options, returnData, type = 'id') => {
     data.forEach(node => {
-        const id = node[options.idField];
+        const id = node[options.idField]
         if (id === nodeId) {
             if (remainNode) {
                 if (type === 'id') {
-                    returnData.push(id);
+                    returnData.push(id)
                 } else {
-                    returnData.push(node);
+                    returnData.push(node)
                 }
             }
         }
@@ -143,9 +180,9 @@ json.findChildrenIds = (id, data, options) => {
         idField: 'id',
         parentIdField: 'parentId',
         remainNode: false,
-    }, options);
-    let returnData = [];
-    jf_findChildren(data, id, options.remainNode, options, returnData);
+    }, options)
+    let returnData = []
+    jf_findChildren(data, id, options.remainNode, options, returnData)
     return returnData
 }
 
@@ -159,9 +196,9 @@ json.findChildren = (id, data, options) => {
         idField: 'id',
         parentIdField: 'parentId',
         remainNode: false,
-    }, options);
-    let returnData = [];
-    jf_findChildren(data, id, options.remainNode, options, returnData, 'node');
+    }, options)
+    let returnData = []
+    jf_findChildren(data, id, options.remainNode, options, returnData, 'node')
     return returnData
 }
 
