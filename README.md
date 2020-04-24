@@ -33,6 +33,7 @@ import jtUtils from "json-tree-utils"
         {id: 11, name: "三级 3-1-1", parentId: 10},
         {id: 12, name: "二级 3-2", parentId: 9},
         {id: 13, name: "三级 3-2-1", parentId: 12},
+        {id: 14, name: "三级 3-2-2", parentId: 12},
     ]
 
     const treeData = [{
@@ -80,59 +81,62 @@ import jtUtils from "json-tree-utils"
             children: [{
                 id:13,
                 name: '三级 3-2-1'
+            },{
+                id:14,
+                name: '三级 3-2-2'
             }]
         }]
     }];  
 
    ```
 
-#### 组装树结构(json数组 转成 树形数据)
+#### 组装树结构(json数组转成树形数据)
    ```
    
-    jtUtils.parse(data, options);
+    jtUtils.json.parse(data, options);
 
     data: json数组
     options: 可选配置项
    
     默认 options = {        
-       idField: 'id', // 节点唯一标识的字段，整棵树中是唯一的
-       parentIdField: 'parentId', // 父节点存放的字段
-       topNodeParentId: 0, // 顶级节点的父id的值
-       childrenField: 'children', // 子节点存放的字段
-       handleNode: (node, children)=>{} // 每个节点的回调处理
+       idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+       parentIdField: 'parentId', // 指定项。父节点存放的字段
+       topNodeParentId: 0, // 指定项。顶级节点的父id的值
+       childrenField: 'children', // 设置项。子节点存放的字段
+       handleNode: (node, children)=>{} // 设置项。每个节点的回调处理
     }
    
    
     使用示例：
     
     const handleNode = (node, children) => {
-       node['label'] = node.name;
-       node['isLeaf'] = children.length === 0;
+        node['label'] = node.name;
+        node['isLeaf'] = children.length === 0;
     }
-    
-    const data = jtUtils.parse(list, {
-       handleNode,
+
+    const data = jtUtils.json.parse(list, {
+        handleNode
     })
-    
+
     console.log(JSON.stringify(data))
    
    ```
 
-#### 拆解树结构(树形数据 转成 json数组)
+#### 拆解树结构(树形数据转成json数组)
    ```
     
-    jtUtils.jsonify(data, options);
+    jtUtils.tree.jsonify(data, options);
     
     data: 树形数据
     options: 可选配置项
     
     默认 options = {        
-        idField: 'id', // 节点唯一标识的字段，整棵树中是唯一的
-        parentIdField: '', // 父节点存放的字段
-        topNodeParentId: undefined, // 顶级节点的父id的值，parentIdField不为空时有效
-        childrenField: 'children', // 子节点存放的字段
-        remainChildren: false, // 是否保留子节点数据
-        handleNode: (node, children)=>{} // 每个节点的回调处理
+        idField: 'id', // 设置项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 设置项。父节点存放的字段
+        topNodeParentId: 0, // 设置项。顶级节点的父id的值
+        childrenField: 'children', // 指定项。子节点存放的字段
+        remainChildren: false, // 设置项。是否保留每个节点的子节点
+        handleNode: null // 设置项。每个节点的回调处理
     }
     
     
@@ -143,9 +147,135 @@ import jtUtils from "json-tree-utils"
         node['isLeaf'] = children.length === 0;
     }
     
-    const data = jtUtils.jsonify(treeData, {
-        handleNode,
+    const data = jtUtils.tree.jsonify(treeData, {
+        handleNode
     })
+    
+    console.log(JSON.stringify(data))
+    
+   ```
+
+#### 过滤树节点(返回所有目标节点以及该节点的所有父节点)
+   ```
+    
+    jtUtils.json.filter(data, handleFilter，options)
+    
+    data: json数组
+    handleFilter: node的过滤处理，return的节点为目标节点
+    options: 可选配置项
+    
+    默认 options = {        
+        idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 指定项。父节点存放的字段
+    }
+    
+    
+    使用示例：
+    
+    const handleFilter = (node) => {
+        if (node.name.indexOf('2-2') !== -1) {
+            node['isTargetNode'] = true;
+            return node
+        }
+    }
+
+    const data = jtUtils.json.filter(list, handleFilter)
+
+    console.log(JSON.stringify(data))
+    
+   ```
+
+#### 查找目标节点的父节点ID(返回某目标节点的所有父节点id的数组)
+   ```
+    
+    jtUtils.json.findParentIds(id, data, options)
+    
+    id: 目标节点的id值
+    data: json数组
+    options: 可选配置项
+    
+    默认 options = {        
+        idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 指定项。父节点存放的字段
+        remainNode: false, //设置项。是否将目标节点ID一起返回
+    }
+    
+    
+    使用示例：
+    
+    const data = jtUtils.json.findParentIds(13, list, {remainNode: true})
+    
+    console.log(JSON.stringify(data))
+    
+   ```
+
+#### 查找目标节点的父节点数据(返回某目标节点的所有父节点数据的数组)
+   ```
+    
+    jtUtils.json.findParents(id, data, options)
+    
+    id: 目标节点的id值
+    data: json数组
+    options: 可选配置项
+    
+    默认 options = {        
+        idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 指定项。父节点存放的字段
+        remainNode: false, //设置项。是否将目标节点ID一起返回
+    }
+    
+    
+    使用示例：
+    
+    const data = jtUtils.json.findParents(13, list, {remainNode: true})
+    
+    console.log(JSON.stringify(data))
+    
+   ```
+
+#### 查找目标节点的子节点ID(返回某目标节点的所有子节点id的数组)
+   ```
+    
+    jtUtils.json.findChildrenIds(id, data, options)
+    
+    id: 目标节点的id值
+    data: json数组
+    options: 可选配置项
+    
+    默认 options = {        
+        idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 指定项。父节点存放的字段
+        remainNode: false, //设置项。是否将目标节点ID一起返回
+    }
+    
+    
+    使用示例：
+    
+    const data = jtUtils.json.findChildrenIds(12, list, {remainNode: true})
+    
+    console.log(JSON.stringify(data))
+    
+   ```
+
+#### 查找目标节点的子节点数据(返回某目标节点的所有子节点数据的数组)
+   ```
+    
+    jtUtils.json.findChildrens(id, data, options)
+    
+    id: 目标节点的id值
+    data: json数组
+    options: 可选配置项
+    
+    默认 options = {        
+        idField: 'id', // 指定项。节点唯一标识的字段，整棵树中是唯一的
+        parentIdField: 'parentId', // 指定项。父节点存放的字段
+        remainNode: false, //设置项。是否将目标节点ID一起返回
+    }
+    
+    
+    使用示例：
+    
+    const data = jtUtils.json.findChildrens(12, list, {remainNode: true})
     
     console.log(JSON.stringify(data))
     
